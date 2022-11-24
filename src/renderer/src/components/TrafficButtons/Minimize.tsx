@@ -1,6 +1,6 @@
 export function Minimize() {
   function handleMinimize() {
-    window.electron.ipcRenderer.send('minimize-app')
+    window.api.minimizeApp()
   }
   return (
     <button

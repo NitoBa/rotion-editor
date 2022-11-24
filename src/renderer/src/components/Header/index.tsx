@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { Code, CaretDoubleRight, TrashSimple } from 'phosphor-react'
 import * as Breadcrumbs from './Breadcrumbs'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import * as WindowBUttons from '../Sidebar/WindowButtons'
+import * as TrafficButtons from '../TrafficButtons'
 
 type Props = {
   isSidebarOpen: boolean
@@ -24,11 +24,11 @@ export function Header({ isSidebarOpen }: Props) {
       )}
     >
       {!isSidebarOpen && (
-        <WindowBUttons.Root className="region-no-drag">
-          <WindowBUttons.Close />
-          <WindowBUttons.Minimize />
-          <WindowBUttons.Maximize />
-        </WindowBUttons.Root>
+        <TrafficButtons.Root className="region-no-drag">
+          <TrafficButtons.Close />
+          <TrafficButtons.Minimize />
+          <TrafficButtons.Maximize />
+        </TrafficButtons.Root>
       )}
       <Collapsible.Trigger
         className={clsx(

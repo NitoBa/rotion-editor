@@ -1,16 +1,22 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  fetchDocuments: (params: any) => {
+    return ipcRenderer.send('fetch-documents', params)
+  },
   closeApp: () => {
-    console.log('Closing app')
+    ipcRenderer.send('close-app')
+  },
+  maximizeApp: () => {
+    ipcRenderer.send('maximize-app')
+  },
+  minimizeApp: () => {
+    ipcRenderer.send('minimize-app')
   },
 }
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
@@ -19,8 +25,6 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  // @ts-ignore (define in dts)
   window.electron = electronAPI
-  // @ts-ignore (define in dts)
   window.api = api
 }

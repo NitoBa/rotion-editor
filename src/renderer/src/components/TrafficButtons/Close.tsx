@@ -1,6 +1,6 @@
 export function Close() {
   function handleClose() {
-    window.electron.ipcRenderer.send('close-app')
+    window.api.closeApp()
   }
   return (
     <button

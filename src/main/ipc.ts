@@ -19,3 +19,7 @@ export function listenActionsOnTrafficButtons(mainWindow: BrowserWindow) {
     }
   })
 }
+
+ipcMain.on('fetch-documents', (event, params) => {
+  console.log(params)
+})

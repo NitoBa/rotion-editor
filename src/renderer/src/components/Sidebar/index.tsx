@@ -1,5 +1,5 @@
 import * as Navigation from './Navigation'
-import * as WindowBUttons from './WindowButtons'
+import * as TrafficButtons from '../TrafficButtons'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import clsx from 'clsx'
 import { CaretDoubleLeft } from 'phosphor-react'
@@ -36,11 +36,11 @@ export function Sidebar() {
         <CaretDoubleLeft className="h-4 w-4" />
       </Collapsible.Trigger>
 
-      <WindowBUttons.Root className="mt-6 ml-4">
-        <WindowBUttons.Close />
-        <WindowBUttons.Minimize />
-        <WindowBUttons.Maximize />
-      </WindowBUttons.Root>
+      <TrafficButtons.Root className="mt-6 ml-4">
+        <TrafficButtons.Close />
+        <TrafficButtons.Minimize />
+        <TrafficButtons.Maximize />
+      </TrafficButtons.Root>
 
       <div
         className={clsx(

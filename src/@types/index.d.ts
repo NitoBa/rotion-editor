@@ -1,8 +1,14 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 
+type Api = {
+  closeApp: () => void
+  maximizeApp: () => void
+  minimizeApp: () => void
+  fetchDocuments: (params: any) => void
+}
 declare global {
-  interface Window {
+  export interface Window {
     electron: ElectronAPI
-    api: { closeApp: () => void }
+    api: Api
   }
 }

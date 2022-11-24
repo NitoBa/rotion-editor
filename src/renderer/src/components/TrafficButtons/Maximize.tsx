@@ -1,6 +1,6 @@
 export function Maximize() {
   function handleMaximize() {
-    window.electron.ipcRenderer.send('maximize-app')
+    window.api.maximizeApp()
   }
   return (
     <button
