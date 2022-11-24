@@ -1,7 +1,8 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { createFileRoute, createURLRoute } from 'electron-router-dom'
 import path from 'node:path'
+import { listenActionsOnTrafficButtons } from './ipc'
 
 function createWindow() {
   // Create the browser window.
@@ -77,7 +78,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow()
 
-  listenActionsWindowButtons(mainWindow)
+  listenActionsOnTrafficButtons(mainWindow)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -94,26 +95,6 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-function listenActionsWindowButtons(mainWindow: BrowserWindow) {
-  ipcMain.addListener('close-app', () => {
-    if (process.platform !== 'darwin') {
-      app.quit()
-    }
-  })
-
-  ipcMain.addListener('minimize-app', () => {
-    mainWindow.minimize()
-  })
-
-  ipcMain.addListener('maximize-app', () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize()
-    } else {
-      mainWindow.maximize()
-    }
-  })
-}
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
