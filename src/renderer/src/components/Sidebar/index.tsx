@@ -6,9 +6,15 @@ import { CaretDoubleLeft } from 'phosphor-react'
 import { CreatePage } from './CreatePage'
 import { Profile } from './Profile'
 import { Search } from './Search'
+import { useQuery } from '@tanstack/react-query'
+import { fetchDocuments } from '../../services/fetchDocuments'
+import { Keys } from '../../../../utils/keys'
 
 export function Sidebar() {
   const isMacOS = process.platform === 'darwin'
+
+  const { data, isLoading } = useQuery([Keys.fetchDocuments], fetchDocuments)
+
   return (
     <Collapsible.Content
       className="bg-rotion-800
@@ -53,17 +59,23 @@ export function Sidebar() {
         <Profile />
         <Search />
 
-        <Navigation.Root>
-          <Navigation.Section>
-            <Navigation.SectionTitle>Workspace</Navigation.SectionTitle>
-            <Navigation.SectionContent>
-              <Navigation.Link>Untitled</Navigation.Link>
-              <Navigation.Link>Discover</Navigation.Link>
-              <Navigation.Link>Ignite</Navigation.Link>
-              <Navigation.Link>Rocketseat</Navigation.Link>
-            </Navigation.SectionContent>
-          </Navigation.Section>
-        </Navigation.Root>
+        {isLoading && (
+          <div className="flex h-full w-full items-center justify-center bg-rotion-600 px-3 animate-pulse rounded-lg" />
+        )}
+        {!isLoading && (
+          <Navigation.Root>
+            <Navigation.Section>
+              <Navigation.SectionTitle>Workspace</Navigation.SectionTitle>
+              <Navigation.SectionContent>
+                {data?.map((document) => (
+                  <Navigation.Link key={document.id}>
+                    {document.title}
+                  </Navigation.Link>
+                ))}
+              </Navigation.SectionContent>
+            </Navigation.Section>
+          </Navigation.Root>
+        )}
 
         <CreatePage />
       </div>

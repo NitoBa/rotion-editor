@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, app } from 'electron'
+import { Keys } from '../utils/keys'
 
 export function listenActionsOnTrafficButtons(mainWindow: BrowserWindow) {
   ipcMain.addListener('close-app', () => {
@@ -20,6 +21,11 @@ export function listenActionsOnTrafficButtons(mainWindow: BrowserWindow) {
   })
 }
 
-ipcMain.on('fetch-documents', (event, params) => {
-  console.log(params)
+ipcMain.handle(Keys.fetchDocuments, () => {
+  return [
+    { id: '1', title: 'Ignite' },
+    { id: '2', title: 'Explorer' },
+    { id: '3', title: 'React native' },
+    { id: '4', title: 'NodeJs' },
+  ]
 })
