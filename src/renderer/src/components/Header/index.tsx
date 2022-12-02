@@ -10,7 +10,6 @@ type Props = {
 
 export function Header({ isSidebarOpen }: Props) {
   const isMacOS = process.platform === 'darwin'
-  const isLinux = process.platform === 'linux'
 
   return (
     <div
@@ -24,7 +23,7 @@ export function Header({ isSidebarOpen }: Props) {
         },
       )}
     >
-      {!isSidebarOpen && !isLinux && (
+      {!isSidebarOpen && (
         <TrafficButtons.Root className="region-no-drag">
           <TrafficButtons.Close />
           <TrafficButtons.Minimize />

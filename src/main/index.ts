@@ -14,6 +14,7 @@ function createWindow() {
     autoHideMenuBar: true,
     backgroundColor: '#17141f',
     titleBarStyle: 'hidden',
+    frame: false,
     trafficLightPosition: { x: 20, y: 20 },
     ...(process.platform === 'linux'
       ? {

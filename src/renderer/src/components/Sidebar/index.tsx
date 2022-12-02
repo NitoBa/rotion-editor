@@ -12,7 +12,6 @@ import { Keys } from '../../../../utils/keys'
 
 export function Sidebar() {
   const isMacOS = process.platform === 'darwin'
-  const isLinux = process.platform === 'linux'
 
   const { data, isLoading } = useQuery([Keys.fetchDocuments], fetchDocuments)
 
@@ -43,13 +42,11 @@ export function Sidebar() {
         <CaretDoubleLeft className="h-4 w-4" />
       </Collapsible.Trigger>
 
-      {!isLinux && (
-        <TrafficButtons.Root className="mt-6 ml-4">
-          <TrafficButtons.Close />
-          <TrafficButtons.Minimize />
-          <TrafficButtons.Maximize />
-        </TrafficButtons.Root>
-      )}
+      <TrafficButtons.Root className="mt-6 ml-4">
+        <TrafficButtons.Close />
+        <TrafficButtons.Minimize />
+        <TrafficButtons.Maximize />
+      </TrafficButtons.Root>
 
       <div
         className={clsx(
