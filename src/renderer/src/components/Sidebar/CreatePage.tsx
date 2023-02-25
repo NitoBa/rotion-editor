@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'phosphor-react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Document } from '~/src/shared/types/ipc'
 import { IPC } from '../../../../shared/constants/ipc'
@@ -29,6 +30,17 @@ export function CreatePage() {
         },
       },
     )
+
+  useEffect(() => {
+    function onNewDocument() {
+      createNewDocument()
+    }
+    const unsubscribe = window.api.onNewDocumentRequest(onNewDocument)
+
+    return () => {
+      unsubscribe()
+    }
+  }, [createNewDocument])
 
   return (
     <button
