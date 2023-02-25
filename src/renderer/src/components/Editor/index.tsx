@@ -7,7 +7,27 @@ import Typography from '@tiptap/extension-typography'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
-export function Editor() {
+export type ContentUpdated = {
+  title: string
+  content: string
+}
+
+type EditorProps = {
+  content: string
+  onContentUpdated: (content: ContentUpdated) => void
+}
+
+export function Editor({ content, onContentUpdated }: EditorProps) {
+  function handleContentUpdated(contentInHTML: string) {
+    const contentRegex = /(<h1>(?<title>.+)<\/h1>(?<content>.+)?)/
+    const parsedContent = contentInHTML.match(contentRegex)?.groups
+
+    const title = parsedContent?.title ?? 'Untitled'
+    const content = parsedContent?.content ?? ''
+
+    onContentUpdated({ title, content })
+  }
+
   const editor = useEditor({
     extensions: [
       Document.extend({
@@ -31,6 +51,8 @@ export function Editor() {
       }),
       Highlight,
     ],
+    content,
+    onUpdate: ({ editor }) => handleContentUpdated(editor.getHTML()),
     autofocus: 'end',
     editorProps: {
       attributes: {

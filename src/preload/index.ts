@@ -1,6 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge } from 'electron'
 import { ElectronAPI, electronAPI } from '@electron-toolkit/preload'
-import { Keys } from '../utils/keys'
+import { DOCUMENTS_APIS } from './apis/documents'
+import { WINDOW_APIS } from './apis/window'
 
 declare global {
   export interface Window {
@@ -11,18 +12,8 @@ declare global {
 
 // Custom APIs for renderer
 const api = {
-  fetchDocuments: async (): Promise<{ id: string; title: string }[]> => {
-    return ipcRenderer.invoke(Keys.fetchDocuments)
-  },
-  closeApp: () => {
-    ipcRenderer.send('close-app')
-  },
-  maximizeApp: () => {
-    ipcRenderer.send('maximize-app')
-  },
-  minimizeApp: () => {
-    ipcRenderer.send('minimize-app')
-  },
+  ...DOCUMENTS_APIS,
+  ...WINDOW_APIS,
 }
 
 if (process.contextIsolated) {

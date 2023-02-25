@@ -8,12 +8,15 @@ import { Profile } from './Profile'
 import { Search } from './Search'
 import { useQuery } from '@tanstack/react-query'
 import { fetchDocuments } from '../../services/fetchDocuments'
-import { Keys } from '../../../../utils/keys'
+import { IPC } from '../../../../shared/constants/ipc'
 
 export function Sidebar() {
   const isMacOS = process.platform === 'darwin'
 
-  const { data, isLoading } = useQuery([Keys.fetchDocuments], fetchDocuments)
+  const { data, isLoading } = useQuery(
+    [IPC.DOCUMENTS.FETCH_ALL],
+    fetchDocuments,
+  )
 
   return (
     <Collapsible.Content
@@ -68,7 +71,10 @@ export function Sidebar() {
               <Navigation.SectionTitle>Workspace</Navigation.SectionTitle>
               <Navigation.SectionContent>
                 {data?.map((document) => (
-                  <Navigation.Link key={document.id}>
+                  <Navigation.Link
+                    key={document.id}
+                    to={`/documents/${document.id}`}
+                  >
                     {document.title}
                   </Navigation.Link>
                 ))}

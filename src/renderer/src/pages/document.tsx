@@ -1,6 +1,65 @@
-import { Editor } from '../components/Editor'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import { Document } from '../../../shared/types/ipc'
+import { IPC } from '../../../shared/constants/ipc'
+import { ContentUpdated, Editor } from '../components/Editor'
 import { ToC } from '../components/ToC'
+import { fetchDocument } from '../services/fetchDocument'
+
 export function DocumentPage() {
+  const { id } = useParams<{ id: string }>()
+  const queryClient = useQueryClient()
+
+  const { data, isFetching } = useQuery(
+    [IPC.DOCUMENTS.FETCH, id],
+    () => fetchDocument(String(id)),
+    {
+      enabled: !!id,
+    },
+  )
+
+  const { mutateAsync: saveDocument } = useMutation(
+    async ({ title, content }: ContentUpdated) => {
+      return window.api.saveDocument({ id: id!, title, content })
+    },
+    {
+      onSuccess: (_, { title, content }) => {
+        queryClient.setQueryData<Document[]>(
+          [IPC.DOCUMENTS.FETCH_ALL],
+          (documents) => {
+            return documents?.map((document) => {
+              if (document.id === id) {
+                return { ...document, title }
+              }
+              return document
+            })
+          },
+        )
+      },
+    },
+  )
+
+  const initialContent = useMemo(() => {
+    if (data) {
+      return `<h1>${data.title}</h1>${data.content ?? '<p></p>'}`
+    }
+    return ''
+  }, [data])
+
+  async function handleEditorContentUpdated(data: ContentUpdated) {
+    // make this save document using debounce function
+    await saveDocument({ ...data })
+  }
+
+  if (isFetching) {
+    return (
+      <div className="grid place-content-center h-full">
+        <h2>Loading document...</h2>
+      </div>
+    )
+  }
+
   return (
     <main className="flex-1 flex py-12 px-10 gap-8">
       <aside className="hidden lg:block sticky top-0">
@@ -18,7 +77,10 @@ export function DocumentPage() {
       </aside>
 
       <section className="flex-1 flex flex-col items-center">
-        <Editor />
+        <Editor
+          content={initialContent}
+          onContentUpdated={handleEditorContentUpdated}
+        />
       </section>
     </main>
   )
